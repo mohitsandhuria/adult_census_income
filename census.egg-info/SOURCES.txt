@@ -1,6 +1,7 @@
 README.md
 setup.py
 census/__init__.py
+census/config.py
 census/exception.py
 census/logger.py
 census.egg-info/PKG-INFO

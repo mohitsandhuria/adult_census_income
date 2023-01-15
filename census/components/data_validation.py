@@ -7,6 +7,7 @@ from census.entity import artifact_entity
 from census import utils
 import os
 import sys
+from scipy.stats import ks_2samp
 
 class DataValidation:
     def __init__(self,data_ingestion_artifact:artifact_entity.DataIngestionArtifact,data_validation_config:configuration_entity.DataValidationConfig):
@@ -40,4 +41,41 @@ class DataValidation:
             return df
         except Exception as e:
             raise CensusException(e, sys)
+
+    def is_required_column_exists(self,base_df,current_df,report_key_name):
+        try:
+            missing_column=[]
+            base_columns=base_df.columns
+            current_columns=current_df.columns
+            
+            for base_column in base_columns:
+                if base_column not in current_columns:
+                    logging.info(f"Column: [{base_column} is not available.]")
+                    missing_column.append(base_column)
+            
+            if len(missing_column)>0:
+                self.validation_error[report_key_name]=missing_column
+                return False
+            return True
+
+        except Exception as e:
+            raise CensusException(e, sys)
+        
+        def data_drift(self,current_df,base_df,report_key_name):
+            drift_report=dict()
+
+            base_columns=base_df.columns
+            current_columns=current_df.columns
+
+            for base_column in base_columns:
+                base_data,current_data=base_df[base_column],current_df[base_column]
+
+                logging.info(f"Hypothesis {base_column}: {base_data.dtype}, {current_data.dtype} ")
+                same_distribution =ks_2samp(base_data,current_data)
+            
+                if same_distribution.p_value>0.5:
+                    drift_report
+
+
+
 
