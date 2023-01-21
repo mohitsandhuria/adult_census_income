@@ -14,3 +14,4 @@ mongo_client=pymongo.MongoClient(env_var.mongo_db_url)
 
 DATABASE_NAME="census"
 COLLECTION_NAME="income"
+TARGET_COLUMN="salary"

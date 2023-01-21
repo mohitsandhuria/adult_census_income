@@ -12,7 +12,10 @@ class DataValidationArtifact:
 
 @dataclass
 class DataTransformationArtifact:
-    pass
+    transform_object_path:str
+    trained_file_path:str
+    test_file_path:str
+    encoder_path:str
 
 @dataclass
 class ModelTrainerArtifact:
