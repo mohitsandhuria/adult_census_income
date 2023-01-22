@@ -6,6 +6,7 @@ from census.entity import configuration_entity
 from census.components.data_ingestion import DataIngestion
 from census.components.data_validation import DataValidation
 from census.components.data_transformation import DataTransformation
+from census.components.model_trainer import ModelTrainer
 
 class start_training_pipeline:
      try:
@@ -26,5 +27,11 @@ class start_training_pipeline:
           data_transformation_config=configuration_entity.DataTransformationConfig(training_pipeline_config=training_pipeline_config)
           data_transformation=DataTransformation(data_ingestion_artifact=data_ingestion_artifact, data_transformation_config=data_transformation_config)
           data_transformation_artifact=data_transformation.initiate_data_transformation()
+
+          #Model Trainer
+          model_trainer_config=configuration_entity.ModelTrainerConfig(training_pipeline_config=training_pipeline_config)
+          model_trainer=ModelTrainer(model_trainer_config=model_trainer_config, data_transformation_artifact=data_transformation_artifact)
+          model_trainer_artifact=model_trainer.initiate_model_training()
+
      except Exception as e:
           raise CensusException(e,sys)

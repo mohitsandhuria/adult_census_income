@@ -60,3 +60,15 @@ def save_object(file_path: str, obj: object):
         logging.info("Exited the save_object method of utils")
     except Exception as e:
         raise CensusException(e, sys) from e
+
+def load_numpy_array_data(file_path):
+    """
+    load numpy array data from file
+    file_path: str location of file to load
+    return: np.array data loaded
+    """
+    try:
+        with open(file_path,'rb') as file_obj:
+            return np.load(file_obj)
+    except Exception as e:
+        raise CensusException(e,sys)

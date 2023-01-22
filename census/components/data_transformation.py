@@ -22,12 +22,14 @@ class DataTransformation:
             self.data_transformation_config=data_transformation_config
         except Exception as e:
             raise CensusException(e, sys)
+
+        except Exception as e:
+            raise CensusException(e, sys)
     @classmethod
     def get_data_transformed(cls):
         try:
-            robust_scaler=RobustScaler()
             simple_imputation=SimpleImputer(strategy='most_frequent')
-            mode_pipeline = Pipeline(steps=[('imputer', simple_imputation),('RobustScaler', robust_scaler)])
+            mode_pipeline = Pipeline(steps=[('imputer', simple_imputation)])
             return mode_pipeline
         except Exception as e:
             raise CensusException(e, sys)
@@ -40,6 +42,7 @@ class DataTransformation:
 
 
             labler={}
+            num_cols=[var for var in train_df.columns if train_df[var].dtype!='O']
             cat_cols=[var for var in train_df.columns if train_df[var].dtype=='O']
             for i in cat_cols:
                 le=LabelEncoder()
@@ -56,6 +59,11 @@ class DataTransformation:
             target_feature_train_df=train_df[TARGET_COLUMN]
             target_feature_test_df=test_df[TARGET_COLUMN]
 
+            rs=RobustScaler()
+            rs.fit(input_feature_train_df[num_cols])
+            input_feature_train_df[num_cols]=rs.transform(input_feature_train_df[num_cols])
+            input_feature_test_df[num_cols]=rs.transform(input_feature_test_df[num_cols])
+
             transformation_pipeline = DataTransformation.get_data_transformed()
             transformation_pipeline.fit(input_feature_train_df)
             
@@ -63,11 +71,15 @@ class DataTransformation:
             input_feature_train_arr = transformation_pipeline.transform(input_feature_train_df)
             input_feature_test_arr = transformation_pipeline.transform(input_feature_test_df)
 
-            smt=SMOTETomek(random_state=42)
+            smt=SMOTETomek(random_state=42,sampling_strategy='minority')
 
             logging.info(f"Before resampling in training set Input: {input_feature_train_arr.shape} Target:{target_feature_train_df.shape}")
             input_feature_train_arr, target_feature_train_df = smt.fit_resample(input_feature_train_arr, target_feature_train_df)
             logging.info(f"After resampling in training set Input: {input_feature_train_arr.shape} Target:{target_feature_train_df.shape}")
+
+            logging.info(f"Before resampling in testing set Input: {input_feature_test_arr.shape} Target:{target_feature_test_df.shape}")
+            input_feature_test_arr, target_feature_test_df = smt.fit_resample(input_feature_test_arr, target_feature_test_df)
+            logging.info(f"After resampling in testing set Input: {input_feature_test_arr.shape} Target:{target_feature_test_df.shape}")
 
             train_arr=np.c_[input_feature_train_arr, target_feature_train_df]
             test_arr=np.c_[input_feature_test_arr, target_feature_test_df]

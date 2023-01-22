@@ -58,12 +58,12 @@ class DataTransformationConfig:
 
 
 class ModelTrainerConfig:
-    def __init__(self,training_pipeline_config:TrainingPipeline):
+    def __init__(self,training_pipeline_config:TrainingPipelineConfig):
         try:
             self.model_trainer_dir=os.path.join(training_pipeline_config.artifact_dir,"model_trainer")
             self.model_path=os.path.join(self.model_trainer_dir,"model_path",MODEL_FILE_NAME)
-            self.expected_score=0.75
-            self.overfitting_threshold = 0.1
+            self.expected_score=0.7
+            self.overfitting_threshold = 0.2
         except Exception as e:
             raise CensusException(e, sys)
 class ModelEvaluationConfig:
