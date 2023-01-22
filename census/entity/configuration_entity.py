@@ -7,6 +7,7 @@ TRAIN_FILE_NAME="train.csv"
 TEST_FILE_NAME="test.csv"
 TRANSFORMER_FILE_PATH="transformer.pkl"
 ENCODER_OBJECT_FILE_PATH="encoder.pkl"
+MODEL_FILE_NAME="model_trainer.pkl"
 
 class TrainingPipelineConfig:
     def __init__(self):
@@ -57,8 +58,14 @@ class DataTransformationConfig:
 
 
 class ModelTrainerConfig:
-    pass
-
+    def __init__(self,training_pipeline_config:TrainingPipeline):
+        try:
+            self.model_trainer_dir=os.path.join(training_pipeline_config.artifact_dir,"model_trainer")
+            self.model_path=os.path.join(self.model_trainer_dir,"model_path",MODEL_FILE_NAME)
+            self.expected_score=0.75
+            self.overfitting_threshold = 0.1
+        except Exception as e:
+            raise CensusException(e, sys)
 class ModelEvaluationConfig:
     pass
 
