@@ -25,7 +25,8 @@ class ModelTrainerArtifact:
 
 @dataclass
 class ModelEvaluationArtifact:
-    pass
+    is_model_accepted:bool
+    improved_accuracy:float
 
 @dataclass
 class ModelPusherArtifact:

@@ -67,7 +67,8 @@ class ModelTrainerConfig:
         except Exception as e:
             raise CensusException(e, sys)
 class ModelEvaluationConfig:
-    pass
+    def __init__(self,training_pipeline_config:TrainingPipelineConfig):
+        self.change_threshold=0.01
 
 class ModelPusherConfig:
     pass
