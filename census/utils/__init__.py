@@ -72,3 +72,12 @@ def load_numpy_array_data(file_path):
             return np.load(file_obj)
     except Exception as e:
         raise CensusException(e,sys)
+
+def load_objects(file_path):
+    try:
+        if not os.path.exists(file_path):
+            raise Exception(f"file does not exist in {file_path}")
+        with open(file_path,"rb") as file_object:
+            return dill.load(file_object)
+    except Exception as e:
+        raise CensusException(e,sys)

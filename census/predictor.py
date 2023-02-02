@@ -13,13 +13,13 @@ class ModelResolver:
         self.model_registry=model_registry
         os.makedirs(self.model_registry,exist_ok=True)
         self.transformer_dir_name=transformer_dir_name
-        self.target_encoder_dir_name=self.target_encoder_dir_name
+        self.target_encoder_dir_name=target_encoder_dir_name
         self.model_dir_name=model_dir_name
     
     def get_latest_dir_path(self):
         try:
             dir_names=os.listdir(self.model_registry)
-            if len(dir_name)==0:
+            if len(dir_names)==0:
                 return None
             dir_names=list(map(int,dir_names))
             latest_folder_name=max(dir_names)

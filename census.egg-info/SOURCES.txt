@@ -4,6 +4,7 @@ census/__init__.py
 census/config.py
 census/exception.py
 census/logger.py
+census/predictor.py
 census.egg-info/PKG-INFO
 census.egg-info/SOURCES.txt
 census.egg-info/dependency_links.txt
