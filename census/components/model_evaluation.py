@@ -52,10 +52,12 @@ class ModelEvaluation:
             current_model=utils.load_objects(file_path=self.model_trainer_artifact.model_path)
 
             test_df=pd.read_csv(self.data_ingestion_artifact.test_file_path)
+            target_df=test_df[TARGET_COLUMN]
             cat_cols=[var for var in test_df.columns if test_df[var].dtype=='O']
             for i in cat_cols:
-                test_df[i]=encoder.transform(test_df[i])
+                test_df[i]=encoder[i].transform(test_df[i])
             y_true=test_df[TARGET_COLUMN]
+
 
             input_feature_name=list(transformer.feature_names_in_)
             input_arr =transformer.transform(test_df[input_feature_name])
@@ -66,7 +68,7 @@ class ModelEvaluation:
             input_feature_name = list(current_transformer.feature_names_in_)
             input_arr =current_transformer.transform(test_df[input_feature_name])
             y_pred = current_model.predict(input_arr)
-            y_true =current_target_encoder.transform(target_df)
+            y_true =current_target_encoder[TARGET_COLUMN].transform(target_df)
             current_model_score=f1_score(y_true,y_pred)
 
             logging.info(f"Accuracy using current trained model: {current_model_score}")

@@ -91,7 +91,7 @@ class DataTransformation:
             utils.save_object(file_path=self.data_transformation_config.encoder_path, obj=labler)
 
             data_transformation_artifact=artifact_entity.DataTransformationArtifact(
-                transform_object_path=self.data_transformation_config.data_transformation_dir,
+                transform_object_path=self.data_transformation_config.transform_object_path,
                 trained_file_path=self.data_transformation_config.trained_file_path, 
                 test_file_path=self.data_transformation_config.test_file_path, 
                 encoder_path=self.data_transformation_config.encoder_path)

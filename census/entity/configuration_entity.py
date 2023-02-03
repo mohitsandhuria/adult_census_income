@@ -71,4 +71,14 @@ class ModelEvaluationConfig:
         self.change_threshold=0.01
 
 class ModelPusherConfig:
-    pass
+    def __init__(self,training_pipeline_config:TrainingPipelineConfig):
+        try:
+            self.model_pusher_dir=os.path.join(training_pipeline_config.artifact_dir,"model_pusher")
+            self.saved_model_dir=os.path.join("saved_models")
+            self.pusher_model_dir=os.path.join(self.model_pusher_dir,"saved_models")
+            self.pusher_model_path=os.path.join(self.pusher_model_dir,MODEL_FILE_NAME)
+            self.pusher_transformer_path=os.path.join(self.pusher_model_dir,TRANSFORMER_FILE_PATH)
+            self.pusher_targer_encoder_path=os.path.join(self.pusher_model_dir,ENCODER_OBJECT_FILE_PATH)
+        except Exception as e:
+            raise CensusException(e,sys)
+            

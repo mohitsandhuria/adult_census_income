@@ -49,6 +49,7 @@ class ModelTrainer:
             yhat_test=model.predict(x_test)
             f1_test_score=f1_score(y_test,yhat_test)
             logging.info(f"Checking if our model is underfitting or not")
+            logging.info(f"f1 test score {f1_test_score}")
             if f1_test_score<self.model_trainer_config.expected_score:
                 raise Exception("model accuracy is not good as it is not able to give good accuracy as \
                 expected: {self.model_trainer_config.expected_score} model accuracy is {f1_test_score}")
