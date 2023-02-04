@@ -40,7 +40,8 @@ def start_batch_prediction(input_file_path):
         model=utils.load_objects(file_path=model_resolver.get_latest_model_path())
         logging.info(f"input array {input_arr}")
         prediction=model.predict(input_arr)
-
+        for i in cat_cols[:-1]:
+            df[i]=encoder[i].inverse_transform(df[i])
         logging.info(f"Loading target encoder to convert predicted column to categorical")
         cat_prediction=encoder[TARGET_COLUMN].inverse_transform(prediction.astype(int))
 
